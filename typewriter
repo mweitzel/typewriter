@@ -1,0 +1,38 @@
+#!/bin/bash
+
+set -e
+height=100
+paper=$1
+
+test -n "$paper" || {
+  echo "usage:"
+  echo "typewriter file"
+  exit 1
+}
+
+touch $paper
+
+n_empty_lines()
+{
+  local x=$1
+  local bulk="$(
+    while $(test $x -gt 0)
+    do
+      echo ' '
+      x=$(($x-1))
+    done
+  )"
+  echo "$bulk"
+}
+
+clear_and_show() {
+  n_empty_lines $height
+  tail -n $height $paper
+}
+
+clear_and_show
+while IFS= read -r line
+do
+  echo "$line">>$paper
+  clear_and_show
+done
